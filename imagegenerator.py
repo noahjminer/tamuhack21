@@ -36,7 +36,7 @@ class ImageGenerator:
     # 0 - linear
     # 1 - spiral
     ##
-    def gen_image(self, style=0):
+    def gen_image(self, style=0)
         if style == 0:
             count = 0
             dim = self.find_dim(len(self.data))
@@ -149,6 +149,7 @@ class ImageGenerator:
 
         pixels.append((1000, 1000, 1000))
 
+        # scale
         for j in scale:
             scaleString = str(j)
             for i in scaleString:
@@ -176,6 +177,7 @@ class ImageGenerator:
             pixels.append((1000, 1000, 1000))
         tempArray.clear()
 
+        # min
         for k in min:
             minString = str(k)
             for i in minString:
@@ -202,6 +204,7 @@ class ImageGenerator:
             pixels.append((1000, 1000, 1000))
         tempArray.clear()
 
+        # samplerate
         s = str(sr)
         for i in s:
             if count < 3:
