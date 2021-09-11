@@ -2,15 +2,14 @@
 from scipy.io.wavfile import read as wavRead
 from sklearn.preprocessing import MinMaxScaler
 
-class Encode():
-
-
-    def __init__(self):
-        self.favnumber = 1
+# This class stores raw wav data, normalized wav data, the sample rate, and the scaler instance
+class Encode:
+    def __init__(self, wav_fname):
+        self.wav_fname = wav_fname
     
 
-    def storeWavData(self, wav_fname):
-        self.samplerate, self.wavdata = wavRead(wav_fname)
+    def storeWavData(self):
+        self.samplerate, self.wavdata = wavRead(self.wav_fname)
         
     
     def normalizeWavData(self):
@@ -18,6 +17,7 @@ class Encode():
         self.normalWavData = self.scaler.fit_transform(self.wavdata)
 
 
-enc = Encode()
-enc.storeWavData('Recording.wav')
+# Example of how to use this classs
+enc = Encode('Recording.wav')
+enc.storeWavData()
 enc.normalizeWavData()
