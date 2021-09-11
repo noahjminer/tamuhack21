@@ -20,4 +20,4 @@ class Encode:
 
 
 # Example of how to use this classs
-enc = Encode('Recording.wav')
+#enc = Encode('Recording.wav')
