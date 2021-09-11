@@ -24,6 +24,7 @@ class Encode:
         self.scalerScale = normFit.scale_
         self.normWavData = normFit.transform(self.wavData)
 
+<<<<<<< HEAD
 
 
 # *** Example of how to use this class ***
@@ -60,3 +61,7 @@ class Encode:
 #  [0. 0.]
 #  [0. 0.]
 #  [3. 3.]]
+=======
+# Example of how to use this classs
+#enc = Encode('Recording.wav')
+>>>>>>> e434faef60afb51173ffefb6b2aeb0df90034529
