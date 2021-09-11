@@ -3,18 +3,25 @@ import math
 
 
 class ImageGenerator:
-    def __init__(self, sampleRate, data, imageOption=0):
+    def __init__(self, filename, min, scale, sampleRate, data, imageOption=0):
         self.sR = sampleRate
         self.data = data
         self.imageOption = imageOption
 
-    def find_dim(self, len):
+    def find_dim(self, len): # need to write in a way that gets closer to len
         sqrt = len ** .5
         if sqrt % 1:
             sqrt = math.floor(sqrt + 1)
         return sqrt
 
-    def gen_image(self):
+    ##
+    # Generate Image
+    # Saves a generated image, modifying pixel data based off of wav file data
+    # style decided which algorithm to use
+    # 0 - linear
+    #
+    ##
+    def gen_image(self, style=0):
         count = 0
         dim = self.find_dim(len(self.data))
         pixelData = []
@@ -37,5 +44,9 @@ class ImageGenerator:
         img = Image.new('RGB', (dim, dim))
         img.putdata(pixelData)
         img.save('image.png')
+
+    def create_encoded_pixel_string(self):
+        pixels = []
+        return pixels
 
 
