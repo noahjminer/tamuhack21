@@ -1,6 +1,6 @@
 from PIL import Image
 import math
-
+import numpy as np
 
 class Pixel:
 
@@ -13,11 +13,8 @@ class Pixel:
         return (self.r, self.g, self.b)
 
 
-
-
-
-
 class ImageGenerator:
+
     def __init__(self, filename, min, scale, samplerate, data, imageOption=0):
         self.sr = samplerate
         self.data = data
@@ -37,33 +34,77 @@ class ImageGenerator:
     # Saves a generated image, modifying pixel data based off of wav file data
     # style decided which algorithm to use
     # 0 - linear
-    #
+    # 1 - spiral
     ##
-    def gen_image(self, style=0):
-        count = 0
-        dim = self.find_dim(len(self.data))
-        pixelData = []
-        for p in self.create_encoded_pixel_string():
-            pixelData.append(p)
-        cols = 0
-        rows = 0
-        for i in self.data:
-            count += 1
+    def gen_image(self, style=0)
+        if style == 0:
+            count = 0
+            dim = self.find_dim(len(self.data))
+            pixelData = []
+            cols = 0
+            rows = 0
+            for i in self.data:
+                count += 1
 
-            if cols > dim:
-                cols = 0
-                rows += 1
+                if cols > dim:
+                    cols = 0
+                    rows += 1
 
-            r = math.floor(i[0] * 255)
-            g = math.floor(i[1] * 255)
-            b = math.floor((count / dim**2) * 255)
-            pixelData.append((r, g, b))
+                r = math.floor(i[0] * 1000)
+                g = math.floor(i[1] * 255)
+                b = math.floor((count / dim**2) * 255)
+                pixelData.append((r, g, b))
 
-        print(dim)
+            print(dim)
 
-        img = Image.new('RGB', (dim, dim))
-        img.putdata(pixelData)
-        img.save('image.png')
+            img = Image.new('RGB', (dim, dim))
+            img.putdata(pixelData)
+            img.save('image.png')
+        elif style == 1:
+            dim = math.floor(self.find_dim(len(self.data))) + 1
+            # print(len(self.data), dim)
+            mat = np.empty((dim, dim), dtype=tuple)
+            x = math.floor(dim/2)
+            y = math.floor(dim/2) + 1
+            # Direction: 0 is east, 1 is north, 2 is west, 3 is south
+            dir = 0
+            count = 0
+            for point in self.data:
+                # print(y, x)
+                r = math.floor(point[0] * 255)
+                g = math.floor(point[1] * 255)
+                b = math.floor((count / dim**2) * 255)
+                mat[y, x] = (r, g, b)
+
+                if dir == 0:
+                    x += 1
+                elif dir == 1:
+                    y -= 1
+                elif dir == 2:
+                    x -= 1
+                elif dir == 3:
+                    y += 1
+                
+                if dir == 0 and mat[y-1, x] is None:
+                    dir = 1
+                elif dir == 1 and mat[y, x-1] is None:
+                    dir = 2
+                elif dir == 2 and mat[y+1, x] is None:
+                    dir = 3
+                elif dir == 3 and mat[y, x+1] is None:
+                    dir = 0
+                
+                count += 1
+            
+            flat = mat.flatten()
+            flat = [i if i is not None else 0 for i in flat]
+            pixString = self.create_encoded_pixel_string()
+            flat[:len(pixString)] = pixString
+            img = Image.new('RGB', (dim, dim))
+            img.putdata(flat)
+            img.save('image2.png')
+
+
 
     # Takes necessary wav data and turns into array of Image friendly pixels to decode
     # order is filename, scale, min, samplerate
@@ -191,3 +232,7 @@ class ImageGenerator:
         return pixels
 
 
+from encode import Encode
+enc = Encode('coolbeat.wav')
+gen = ImageGenerator('Recording.png', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 1)
+gen.gen_image(style=1)
