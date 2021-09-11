@@ -14,7 +14,6 @@ class Pixel:
 
 
 class ImageGenerator:
-
     def __init__(self, filename, min, scale, samplerate, data, imageOption=0):
         self.sr = samplerate
         self.data = data
@@ -36,7 +35,7 @@ class ImageGenerator:
     # 0 - linear
     # 1 - spiral
     ##
-    def gen_image(self, style=0)
+    def gen_image(self, style=0):
         if style == 0:
             count = 0
             dim = self.find_dim(len(self.data))
@@ -232,7 +231,7 @@ class ImageGenerator:
         return pixels
 
 
-from encode import Encode
-enc = Encode('coolbeat.wav')
-gen = ImageGenerator('Recording.png', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 1)
-gen.gen_image(style=1)
+# from encode import Encode
+# enc = Encode('coolbeat.wav')
+# gen = ImageGenerator('Recording.png', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 1)
+# gen.gen_image(style=1)

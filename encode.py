@@ -27,7 +27,7 @@ class Encode:
 
 
 # *** Example of how to use this class ***
-enc = Encode('WATCH_OUT_MOOMIN.WAV')
+# enc = Encode('WATCH_OUT_MOOMIN.WAV')
 
 # *** Example of what scalerScale, scalerMin, and sampleRate will look like ***
 # *** These need to be saved inside the image somewhere ***
@@ -39,10 +39,10 @@ enc = Encode('WATCH_OUT_MOOMIN.WAV')
 # 48000
 
 # *** Example of how we would use saved min and scale arr to denormalize data ***
-sc = MinMaxScaler((0, 1))
-sc.min_ = enc.scalerMin
-sc.scale_ = enc.scalerScale
-denorm = sc.inverse_transform(enc.normWavData)
+# sc = MinMaxScaler((0, 1))
+# sc.min_ = enc.scalerMin
+# sc.scale_ = enc.scalerScale
+# denorm = sc.inverse_transform(enc.normWavData)
 
 # *** Output of normalized data, original data, and denormalized data using saved min and scaler ***
 # print(enc.normWavData)
@@ -55,9 +55,9 @@ denorm = sc.inverse_transform(enc.normWavData)
 #  [0 0]
 #  [0 0]
 #  [3 3]]
-print(type(enc.scalerScale))
-print(enc.scalerMin)
-print(denorm)
+# print(type(enc.scalerScale))
+# print(enc.scalerMin)
+# print(denorm)
 #  ...
 #  [0. 0.]
 #  [0. 0.]
