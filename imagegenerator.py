@@ -54,7 +54,7 @@ class ImageGenerator:
                 cols = 0
                 rows += 1
 
-            r = math.floor(i[0] * 1000)
+            r = math.floor(i[0] * 255)
             g = math.floor(i[1] * 255)
             b = math.floor((count / dim**2) * 255)
             pixelData.append((r, g, b))
@@ -108,6 +108,7 @@ class ImageGenerator:
 
         pixels.append((1000, 1000, 1000))
 
+        # scale
         for j in scale:
             scaleString = str(j)
             for i in scaleString:
@@ -135,6 +136,7 @@ class ImageGenerator:
             pixels.append((1000, 1000, 1000))
         tempArray.clear()
 
+        # min
         for k in min:
             minString = str(k)
             for i in minString:
@@ -161,6 +163,7 @@ class ImageGenerator:
             pixels.append((1000, 1000, 1000))
         tempArray.clear()
 
+        # samplerate
         s = str(sr)
         for i in s:
             if count < 3:
