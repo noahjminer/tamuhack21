@@ -6,6 +6,8 @@ from sklearn.preprocessing import MinMaxScaler
 class Encode:
     def __init__(self, wav_fname):
         self.wav_fname = wav_fname
+        self.storeWavData()
+        self.normalizeWavData()
     
 
     def storeWavData(self):
@@ -19,5 +21,3 @@ class Encode:
 
 # Example of how to use this classs
 enc = Encode('Recording.wav')
-enc.storeWavData()
-enc.normalizeWavData()
