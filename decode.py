@@ -123,4 +123,4 @@ class Decode:
     # Export song to current working directory
     def exportSong(self):
         # print(self.rawWavData, len(self.rawWavData))
-        return wavWrite("song.wav", self.sampleRate, np.array(self.rawWavData, dtype=np.int16))
+        return wavWrite("song.wav", self.sampleRate, np.array(self.normWavData, dtype=np.int8))

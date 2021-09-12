@@ -14,13 +14,14 @@ class Pixel:
 
 
 class ImageGenerator:
-    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0):
+    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0, backGroundImageFname=""):
         self.sr = samplerate
         self.data = data
         self.style = imageOption
         self.songFilename = songFilename
         self.min = min
         self.scale = scale
+        self.backGroundImageFname = backGroundImageFname
         self.gen_image()
 
     def find_dim(self, len): # need to write in a way that gets closer to len
@@ -75,11 +76,19 @@ class ImageGenerator:
             # Direction: 0 is east, 1 is north, 2 is west, 3 is south
             dir = 0
             count = 0
+
+            if self.backGroundImageFname != "":
+                im = Image.open(self.backGroundImageFname)
+                im = im.resize((dim, dim))
+                backIm = im.getdata()
             for point in self.data:
                 # print(y, x)
                 r = math.floor(point[0])
                 g = math.floor(point[1])
-                b = math.floor((count / dim**2))
+                if self.backGroundImageFname != "":
+                    b = backIm[x + y*dim][2]
+                else:
+                    b = count % 10
                 mat[y, x] = (r, g, b)
 
                 if dir == 0:
