@@ -5,10 +5,13 @@ from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
         QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
         QVBoxLayout, QWidget, QFileDialog)
 from PyQt5.QtGui import QPixmap
+from handler import Handler
 
 
 class WidgetGallery(QDialog):
     def __init__(self, parent=None):
+        self.handler = Handler()
+
         super(WidgetGallery, self).__init__(parent)
 
         self.originalPalette = QApplication.palette()
@@ -31,9 +34,6 @@ class WidgetGallery(QDialog):
         self.createBottomRightGroupBox()
         self.createProgressBar()
 
-        # top right
-        self.greenScalarSlider = QSlider(Qt.Horizontal)
-        self.redScalarSlider = QSlider(Qt.Horizontal)
 
         styleComboBox.activated[int].connect(self.changeStyle)
 
@@ -55,12 +55,11 @@ class WidgetGallery(QDialog):
         mainLayout.setColumnStretch(1, 1)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle("Styles")
+        self.setWindowTitle("Digital Vinyl")
         # self.changeStyle('Windows')
 
     def changeStyle(self, styleName):
-        # switch for style
-        print(styleName)
+        self.handler.style = styleName
 
     def advanceProgressBar(self):
         curVal = self.progressBar.value()
@@ -98,12 +97,12 @@ class WidgetGallery(QDialog):
     def getfile(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file', '', "Audio Files (*.wav)")
         self.le.setText(fname[0].split("/")[-1])
-        print(fname)
+        self.handler.wavToEncode = fname[0]
 
     def getimagefile(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '', 'Image File (*.jpg, *.png)')
+        fname = QFileDialog.getOpenFileName(self, 'Open file', '', 'Image File (*.jpg, *.png, *.jpeg)')
+        self.handler.backgroundImage = fname[0]
         self.le2.setPixmap(QPixmap(fname[0]))
-        print(fname)
 
     def createTopRightGroupBox(self):
         self.topRightGroupBox = QGroupBox("Render image")
@@ -112,43 +111,49 @@ class WidgetGallery(QDialog):
         render.setDefault(False)
         render.clicked.connect(self.renderImage)
 
-        redScalarSlider = QSlider(Qt.Horizontal, self.topRightGroupBox)
-        redScalarSlider.setTickInterval(10)
-        redScalarSlider.setMinimum(1)
-        redScalarSlider.setMaximum(10)
-        redScalarSlider.valueChanged.connect(self.redscalarchange)
+        self.redScalarSlider = QSlider(Qt.Horizontal, self.topRightGroupBox)
+        self.redScalarSlider.setTickInterval(1)
+        self.redScalarSlider.setMinimum(1)
+        self.redScalarSlider.setMaximum(10)
+        self.redScalarSlider.valueChanged.connect(self.redscalarchange)
+        self.redScalarSlider.setTickPosition(QSlider.TicksBelow)
+        self.redScalarSlider.setTickInterval(1)
 
-        redScalar = QLabel()
-        redScalar.setText("Red Scalar: ")
-        redScalar.setBuddy(redScalarSlider)
+        self.redScalar = QLabel()
+        self.redScalar.setText("Red Scaler: ")
+        self.redScalar.setBuddy(self.redScalarSlider)
 
-        greenScalarSlider = QSlider(Qt.Horizontal, self.topRightGroupBox)
-        greenScalarSlider.setTickInterval(10)
-        greenScalarSlider.setMinimum(1)
-        greenScalarSlider.setMaximum(10)
-        greenScalarSlider.valueChanged.connect(self.greenscalarchange)
+        self.greenScalarSlider = QSlider(Qt.Horizontal, self.topRightGroupBox)
+        self.greenScalarSlider.setTickInterval(1)
+        self.greenScalarSlider.setMinimum(1)
+        self.greenScalarSlider.setMaximum(10)
+        self.greenScalarSlider.setTickPosition(QSlider.TicksBelow)
+        self.greenScalarSlider.setTickInterval(1)
+        self.greenScalarSlider.valueChanged.connect(self.greenscalarchange)
 
-        greenScalar = QLabel()
-        greenScalar.setText("Green Scalar: ")
-        greenScalar.setBuddy(greenScalarSlider)
+        self.greenScalar = QLabel()
+        self.greenScalar.setText("Green Scaler: ")
+        self.greenScalar.setBuddy(self.greenScalarSlider)
 
         layout = QVBoxLayout()
-        layout.addWidget(redScalar)
-        layout.addWidget(redScalarSlider)
-        layout.addWidget(greenScalar)
-        layout.addWidget(greenScalarSlider)
+        layout.addWidget(self.redScalar)
+        layout.addWidget(self.redScalarSlider)
+        layout.addWidget(self.greenScalar)
+        layout.addWidget(self.greenScalarSlider)
         layout.addWidget(render)
         layout.addStretch(1)
         self.topRightGroupBox.setLayout(layout)
 
     def redscalarchange(self):
+        self.handler.redScalarValue = self.redScalarSlider.value()
         print(self.redScalarSlider.value())
 
     def greenscalarchange(self):
+        self.handler.greenScalarValue = self.greenScalarSlider.value()
         print(self.greenScalarSlider.value())
 
     def renderImage(self):
-        print("render image")
+        self.handler.encodeWavIntoImage()
 
     def createBottomLeftTabWidget(self):
         self.bottomLeftGroupBox = QGroupBox("Extract wav from image")
@@ -164,8 +169,8 @@ class WidgetGallery(QDialog):
 
     def getencodedfile(self):
         fname = QFileDialog.getOpenFileName(self, 'Open Image', '', "Image Files (*.png)")
-        #self.embedUpload.setText(fname[0].split("/")[-1])
         self.embedUpload.setPixmap(QPixmap(fname[0]))
+        self.handler.imageToDecode = fname[0]
         print(fname)
 
 
@@ -179,7 +184,7 @@ class WidgetGallery(QDialog):
         self.bottomRightGroupBox.setLayout(layout)
 
     def extractwav(self):
-        print("extract wav")
+        self.handler.decodeImageIntoWav()
 
     def createProgressBar(self):
         self.progressBar = QProgressBar()
