@@ -56,9 +56,9 @@ class ImageGenerator:
                     cols = 0
                     rows += 1
 
-                r = math.floor(i[0] * 256)
-                g = math.floor(i[1] * 256)
-                b = math.floor((count / dim**2))
+                r = round(i[0])
+                g = round(i[1])
+                b = math.floor((count / dim**2) * 256)
                 pixelData.append((r, g, b))
 
             img = Image.new('RGB', (dim, dim))
