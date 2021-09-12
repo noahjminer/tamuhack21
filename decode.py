@@ -61,8 +61,8 @@ class Decode:
         self.normWavData = []
         if self.style == 0:
             for p in range(count, self.pixelCount):
-                lChan = pixels[p][0] / 256
-                rChan = pixels[p][1] / 256
+                lChan = pixels[p][0]
+                rChan = pixels[p][1]
                 self.normWavData.append([lChan, rChan])
         elif self.style == 1:
             dim = int(self.numPixels ** .5)
@@ -123,4 +123,4 @@ class Decode:
     # Export song to current working directory
     def exportSong(self):
         # print(self.rawWavData, len(self.rawWavData))
-        return wavWrite("song.wav", self.sampleRate, np.array(self.rawWavData, dtype=np.int16))
+        return wavWrite("song.wav", self.sampleRate, np.array(self.normWavData, dtype=np.int8))
