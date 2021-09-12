@@ -100,7 +100,7 @@ class WidgetGallery(QDialog):
         self.handler.wavToEncode = fname[0]
 
     def getimagefile(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '', 'Image File (*.jpg, *.png, *.jpeg)')
+        fname = QFileDialog.getOpenFileName(self, 'Open file', '', 'Image File (*.jpg *.png *.jpeg)')
         self.handler.backgroundImage = fname[0]
         self.le2.setPixmap(QPixmap(fname[0]))
 
