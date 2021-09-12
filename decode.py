@@ -83,11 +83,3 @@ class Decode:
     def exportSong(self):
         # print(self.rawWavData, len(self.rawWavData))
         return wavWrite("song.wav", self.sampleRate, np.array(self.rawWavData, dtype=np.int16))
-
-
-dec = Decode('image.png')
-dec.exportSong()
-
-# print(np.array(dec.normWavData)[0:10], len(dec.normWavData))
-# print(np.array(dec.rawWavData)[0:10], len(dec.rawWavData))
-# print(dec.sampleRate, dec.scalerMin, dec.scalerScale)

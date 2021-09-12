@@ -236,20 +236,4 @@ class ImageGenerator:
         pixels.append((1000, 1000, 1000))
 
         return pixels
-
-
-from encode import Encode
-enc = Encode('coolbeat.wav')
-gen = ImageGenerator('coolbeat.wav', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 0)
-
-# print(enc.wavData, len(enc.wavData))
-
-from sklearn.preprocessing import MinMaxScaler
-sc = MinMaxScaler((0,255))
-sc.min_ = enc.scalerMin
-sc.scale_ = enc.scalerScale
-t = sc.inverse_transform(enc.normWavData)
-# print(t, len(t))
-# print(enc.normWavData[0:10], len(enc.normWavData))
-print(enc.wavData[0:10], len(enc.wavData))
-# print(enc.scalerMin, enc.scalerScale)
+        
