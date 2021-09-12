@@ -274,5 +274,4 @@ class ImageGenerator:
 
         pixels.append((1000, 1000, 1000))
 
-
         return pixels
