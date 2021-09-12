@@ -11,16 +11,19 @@ class Decode:
         self.denormalize()
 
     def parseAttributes(self, attributes):
-        if len(attributes) != 6:
+        if len(attributes) != 7:
             print("Incorrect number of attr in extractDataFromImage")
             quit(0)
 
-        self.wavFilename = list2string(attributes[0])
-        self.scalerScale[0] = np.float64(list2string(attributes[1]))
-        self.scalerScale[1] = np.float64(list2string(attributes[2]))
-        self.scalerMin[0] = float(list2string(attributes[3]))
-        self.scalerMin[1] = float(list2string(attributes[4]))
-        self.sampleRate = int(list2string(attributes[5]))
+        print(attributes[0])
+        print(list2string(attributes[0]))
+        self.style = int(list2string(attributes[0]))
+        self.wavFilename = list2string(attributes[1])
+        self.scalerScale[0] = np.float64(list2string(attributes[2]))
+        self.scalerScale[1] = np.float64(list2string(attributes[3]))
+        self.scalerMin[0] = np.float(list2string(attributes[4]))
+        self.scalerMin[1] = np.float(list2string(attributes[5]))
+        self.sampleRate = int(list2string(attributes[6]))
 
     # todo - need to extract the normalized wav data, sample rate, scalerMin, and scalerScale from image
     def extractDataFromImage(self, filename): # Possibly add parameter for which function was used to generate image (linear, spiral)
@@ -39,7 +42,7 @@ class Decode:
         whiteCount = 0
         count = 0
         for p in pixels:
-            if whiteCount > 6:
+            if whiteCount > 7:
                 break
             count += 1
             if p == (255, 255, 255):

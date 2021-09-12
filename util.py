@@ -3,7 +3,5 @@ def list2string(list):
     for l in list:
         if l == 127:
             break
-        if chr(l) == ',':
-            print("COMMA")
         s += chr(l)
     return s

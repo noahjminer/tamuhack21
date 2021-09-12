@@ -40,6 +40,11 @@ class ImageGenerator:
             count = 0
             dim = self.find_dim(len(self.data))
             pixelData = []
+
+            pixelString = self.create_encoded_pixel_string(style)
+            for i in pixelString:
+                pixelData.append(i)
+
             cols = 0
             rows = 0
             for i in self.data:
@@ -97,7 +102,7 @@ class ImageGenerator:
             
             flat = mat.flatten()
             flat = [i if i is not None else 0 for i in flat]
-            pixString = self.create_encoded_pixel_string()
+            pixString = self.create_encoded_pixel_string(style)
             flat[:len(pixString)] = pixString
             img = Image.new('RGB', (dim, dim))
             img.putdata(flat)
@@ -108,7 +113,7 @@ class ImageGenerator:
     # Takes necessary wav data and turns into array of Image friendly pixels to decode
     # order is filename, scale, min, samplerate
     # Sequences will be split by extreme value to be determined
-    def create_encoded_pixel_string(self):
+    def create_encoded_pixel_string(self, style=0):
         pixels = []
         fn = self.filename
         scale = self.scale
@@ -116,6 +121,9 @@ class ImageGenerator:
         sr = self.sr
 
         count = 0
+
+        pixels.append((1000, 1000, 1000))
+        pixels.append((ord(str(style)), 127, 127))
 
         # start pixel
         pixels.append((1000, 1000, 1000))
