@@ -14,7 +14,7 @@ class Pixel:
 
 
 class ImageGenerator:
-    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0, backGroundImageFname=""):
+    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0, backGroundImageFname="", redScalar=1, greenScalar=1):
         self.sr = samplerate
         self.data = data
         self.style = imageOption
@@ -22,6 +22,8 @@ class ImageGenerator:
         self.min = min
         self.scale = scale
         self.backGroundImageFname = backGroundImageFname
+        self.redScalar = redScalar
+        self.greenScalar = greenScalar
         self.gen_image()
 
     def find_dim(self, len): # need to write in a way that gets closer to len
@@ -48,6 +50,11 @@ class ImageGenerator:
             for i in pixelString:
                 pixelData.append(i)
 
+            if self.backGroundImageFname != "":
+                im = Image.open(self.backGroundImageFname)
+                im = im.resize((dim, dim))
+                backIm = im.getdata()
+            
             cols = 0
             rows = 0
             for i in self.data:
@@ -57,9 +64,12 @@ class ImageGenerator:
                     cols = 0
                     rows += 1
 
-                r = round(i[0])
-                g = round(i[1])
-                b = math.floor((count / dim**2) * 256)
+                r = round(i[0] / self.redScalar)
+                g = round(i[1] / self.greenScalar)
+                if self.backGroundImageFname != "":
+                    b = backIm[len(pixelString) + count - 1][2]
+                else:
+                    b = math.floor((count / dim**2))
                 pixelData.append((r, g, b))
 
             img = Image.new('RGB', (dim, dim))
@@ -83,10 +93,10 @@ class ImageGenerator:
                 backIm = im.getdata()
             for point in self.data:
                 # print(y, x)
-                r = math.floor(point[0])
-                g = math.floor(point[1])
+                r = math.floor(point[0] / self.redScalar)
+                g = math.floor(point[1] / self.greenScalar)
                 if self.backGroundImageFname != "":
-                    b = backIm[x + y*dim][2] * 2
+                    b = backIm[x + y*dim][2]
                 else:
                     b = count % 10
                 mat[y, x] = (r, g, b)
