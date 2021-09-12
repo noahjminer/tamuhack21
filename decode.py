@@ -7,7 +7,7 @@ import numpy as np
 class Decode:
     def __init__(self, imageFname):
         self.imageFname = imageFname
-        self.extractDataFromImage(imageFname)
+        self.extractDataFromImage()
         self.denormalize()
 
     def parseAttributes(self, attributes):
@@ -23,15 +23,14 @@ class Decode:
         self.scalerMin[1] = np.float64(list2string(attributes[5]))
         self.sampleRate = int(list2string(attributes[6]))
 
+
     # todo - need to extract the normalized wav data, sample rate, scalerMin, and scalerScale from image
-    def extractDataFromImage(self, filename): # Possibly add parameter for which function was used to generate image (linear, spiral)
+    def extractDataFromImage(self): # Possibly add parameter for which function was used to generate image (linear, spiral)
         self.scalerMin = [-1, -1]
         self.scalerScale = [-1, -1]
-        self.normWavData = [[-1, -1], [-1, -1]]
-        self.wavFilename = ""
 
         # linear
-        with Image.open(filename) as im:
+        with Image.open(self.imageFname) as im:
             pixels = im.getdata()
 
         # get attributes
@@ -54,28 +53,36 @@ class Decode:
                 varArr.append(p[1])
                 varArr.append(p[2])
         self.parseAttributes(attributes)
+        self.extractWavData(count, pixels)
 
-        for p in range(count, len(pixels)):
-            lChan = pixels[p][0] / 255
-            rChan = pixels[p][1] / 255
+    def extractWavData(self, count, pixels):
+        self.normWavData = []
+        for p in range(count, 960000 + 43):
+            lChan = pixels[p][0] / 1000
+            rChan = pixels[p][1] / 1000
+            # if lChan == 0 and rChan == 0:
+            #     break
             self.normWavData.append([lChan, rChan])
         np.array(self.normWavData)
 
+
     # Denormalize extracted wav data and store raw wav data
     def denormalize(self):
-        # the feature range will not change
         scaler = MinMaxScaler((0, 1))
         scaler.min_ = self.scalerMin
         scaler.scale_ = self.scalerScale
         self.rawWavData = scaler.inverse_transform(self.normWavData)
-        np.array(self.rawWavData)
 
 
     # Export song to current working directory
     def exportSong(self):
-        print(self.rawWavData)
-        return wavWrite("song.wav", self.sampleRate, self.rawWavData)
+        # print(self.rawWavData, len(self.rawWavData))
+        return wavWrite("song.wav", self.sampleRate, np.array(self.normWavData, dtype=float))
 
 
-# dec = Decode('Panis.png')
-# dec.exportSong
+dec = Decode('image.png')
+dec.exportSong()
+
+print(np.array(dec.normWavData)[0:10], len(dec.normWavData))
+# print(np.array(dec.rawWavData)[0:10], len(dec.normWavData))
+# print(dec.sampleRate, dec.scalerMin, dec.scalerScale)

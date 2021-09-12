@@ -18,7 +18,7 @@ class Encode:
     # Normalize data to (0, 1)
     # We need to encode scalermin, scalerscale, and normWavData into the image
     def normalize(self):
-        scaler = MinMaxScaler((0, 1))
+        scaler = MinMaxScaler((-1, 1))
         normFit = scaler.fit(self.wavData)
         self.scalerMin = normFit.min_
         self.scalerScale = normFit.scale_
