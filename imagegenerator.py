@@ -86,7 +86,7 @@ class ImageGenerator:
                 r = math.floor(point[0])
                 g = math.floor(point[1])
                 if self.backGroundImageFname != "":
-                    b = backIm[x + y*dim][2]
+                    b = backIm[x + y*dim][2] * 2
                 else:
                     b = count % 10
                 mat[y, x] = (r, g, b)
