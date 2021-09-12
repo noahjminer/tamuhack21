@@ -10,6 +10,7 @@ __pycache__/
 *.png
 .idea
 *.jpg
+*.jpeg
 testing.py
 
 # Distribution / packaging
