@@ -18,7 +18,7 @@ class ImageGenerator:
         self.sr = samplerate
         self.data = data
         self.style = imageOption
-        self.songFilename = songFilename
+        self.songFilename = songFilename.split("/")[-1]
         self.min = min
         self.scale = scale
         self.backGroundImageFname = backGroundImageFname
