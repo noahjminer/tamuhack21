@@ -235,21 +235,30 @@ class ImageGenerator:
 
         pixels.append((1000, 1000, 1000))
 
+        #pixelNum
+        l = str(len(self.data) + len(pixels))
+        for i in l:
+            if count < 3:
+                count += 1
+                tempArray.append(ord(i))
+            else:
+                count = 1
+                p = Pixel(tempArray[0], tempArray[1], tempArray[2])
+                pixels.append(p.getValue())
+                tempArray.clear()
+                tempArray.append(ord(i))
+
+        if count == 3:
+            p = Pixel(tempArray[0], tempArray[1], tempArray[2])
+            pixels.append(p.getValue())
+        elif count == 2:
+            p = Pixel(tempArray[0], tempArray[1], 127)
+            pixels.append(p.getValue())
+        elif count == 1:
+            p = Pixel(tempArray[0], 127, 127)
+            pixels.append(p.getValue())
+
+        pixels.append((1000, 1000, 1000))
+
+
         return pixels
-
-
-from encode import Encode
-enc = Encode('coolbeat.wav')
-gen = ImageGenerator('coolbeat.wav', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 0)
-
-# print(enc.wavData, len(enc.wavData))
-
-from sklearn.preprocessing import MinMaxScaler
-sc = MinMaxScaler((0,255))
-sc.min_ = enc.scalerMin
-sc.scale_ = enc.scalerScale
-t = sc.inverse_transform(enc.normWavData)
-# print(t, len(t))
-# print(enc.normWavData[0:10], len(enc.normWavData))
-print(enc.wavData[0:10], len(enc.wavData))
-# print(enc.scalerMin, enc.scalerScale)
