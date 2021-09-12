@@ -57,11 +57,11 @@ class Decode:
 
     def extractWavData(self, count, pixels):
         self.normWavData = []
-        for p in range(count, 960000 + 43):
-            lChan = pixels[p][0] / 1000
-            rChan = pixels[p][1] / 1000
-            # if lChan == 0 and rChan == 0:
-            #     break
+        for p in range(count, len(pixels)):
+            lChan = pixels[p][0] / 256
+            rChan = pixels[p][1] / 256
+            if lChan == 0 and rChan == 0:
+                break
             self.normWavData.append([lChan, rChan])
         np.array(self.normWavData)
 
@@ -73,16 +73,21 @@ class Decode:
         scaler.scale_ = self.scalerScale
         self.rawWavData = scaler.inverse_transform(self.normWavData)
 
+        import math
+        for i in range(len(self.rawWavData)):
+            self.rawWavData[i][0] = math.floor(self.rawWavData[i][0])
+            self.rawWavData[i][1] = math.floor(self.rawWavData[i][1])
+
 
     # Export song to current working directory
     def exportSong(self):
         # print(self.rawWavData, len(self.rawWavData))
-        return wavWrite("song.wav", self.sampleRate, np.array(self.normWavData, dtype=float))
+        return wavWrite("song.wav", self.sampleRate, np.array(self.rawWavData, dtype=np.int16))
 
 
 dec = Decode('image.png')
 dec.exportSong()
 
-print(np.array(dec.normWavData)[0:10], len(dec.normWavData))
-# print(np.array(dec.rawWavData)[0:10], len(dec.normWavData))
+# print(np.array(dec.normWavData)[0:10], len(dec.normWavData))
+# print(np.array(dec.rawWavData)[0:10], len(dec.rawWavData))
 # print(dec.sampleRate, dec.scalerMin, dec.scalerScale)

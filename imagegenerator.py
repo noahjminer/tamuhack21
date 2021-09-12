@@ -55,8 +55,8 @@ class ImageGenerator:
                     cols = 0
                     rows += 1
 
-                r = math.floor(i[0] * 1000)
-                g = math.floor(i[1] * 1000)
+                r = math.floor(i[0] * 256)
+                g = math.floor(i[1] * 256)
                 b = math.floor((count / dim**2))
                 pixelData.append((r, g, b))
 
@@ -250,6 +250,6 @@ sc.min_ = enc.scalerMin
 sc.scale_ = enc.scalerScale
 t = sc.inverse_transform(enc.normWavData)
 # print(t, len(t))
-print(enc.normWavData[0:10], len(enc.normWavData))
-# print(enc.wavData[0:10], len(enc.wavData))
+# print(enc.normWavData[0:10], len(enc.normWavData))
+print(enc.wavData[0:10], len(enc.wavData))
 # print(enc.scalerMin, enc.scalerScale)
