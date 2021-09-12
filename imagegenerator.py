@@ -236,11 +236,8 @@ class ImageGenerator:
         pixels.append((1000, 1000, 1000))
 
         return pixels
-<<<<<<< HEAD
-=======
 
 
 from encode import Encode
 enc = Encode('coolbeat.wav')
 gen = ImageGenerator('coolbeat.wav', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 1)
->>>>>>> 3878b43a870e8df0b5a9d29aafab94d93fac5b6d

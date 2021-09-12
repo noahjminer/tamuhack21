@@ -55,15 +55,10 @@ class Encode:
 #  [0 0]
 #  [0 0]
 #  [3 3]]
-<<<<<<< HEAD
-print(enc.scalerMin)
-print(enc.scalerScale)
-print(denorm)
-=======
+
 # print(type(enc.scalerScale))
 # print(enc.scalerMin)
 # print(denorm)
->>>>>>> 3878b43a870e8df0b5a9d29aafab94d93fac5b6d
 #  ...
 #  [0. 0.]
 #  [0. 0.]
