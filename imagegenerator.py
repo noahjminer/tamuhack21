@@ -65,45 +65,49 @@ class ImageGenerator:
             img.putdata(pixelData)
             img.save('image.png', compress_level=0)
         elif style == 1:
-            dim = math.floor(self.find_dim(len(self.data))) + 1
+            dim = math.floor(self.find_dim(len(self.data)))
             # print(len(self.data), dim)
             mat = np.empty((dim, dim), dtype=tuple)
-            x = math.floor(dim/2)
-            y = math.floor(dim/2) + 1
+            pixString = self.create_encoded_pixel_string()
+            x = len(pixString)
+            y = 0
+            mat[0, :len(pixString)] = pixString
             # Direction: 0 is east, 1 is north, 2 is west, 3 is south
             dir = 0
             count = 0
             for point in self.data:
                 # print(y, x)
-                r = math.floor(point[0] * 255)
-                g = math.floor(point[1] * 255)
-                b = math.floor((count / dim**2) * 255)
+                r = math.floor(point[0])
+                g = math.floor(point[1])
+                b = math.floor((count / dim**2))
                 mat[y, x] = (r, g, b)
 
                 if dir == 0:
                     x += 1
                 elif dir == 1:
-                    y -= 1
+                    y += 1
                 elif dir == 2:
                     x -= 1
                 elif dir == 3:
-                    y += 1
+                    y -= 1
                 
-                if dir == 0 and mat[y-1, x] is None:
-                    dir = 1
-                elif dir == 1 and mat[y, x-1] is None:
-                    dir = 2
-                elif dir == 2 and mat[y+1, x] is None:
-                    dir = 3
-                elif dir == 3 and mat[y, x+1] is None:
-                    dir = 0
+                if dir == 0:
+                    if x == dim-1 or mat[y, x+1] is not None:
+                        dir = 1
+                elif dir == 1:
+                    if y == dim-1 or mat[y+1, x] is not None:
+                        dir = 2
+                elif dir == 2:
+                    if x == 0 or mat[y, x-1] is not None:
+                        dir = 3
+                elif dir == 3:
+                    if y == 0 or mat[y-1, x] is not None:
+                        dir = 0
                 
                 count += 1
             
             flat = mat.flatten()
             flat = [i if i is not None else 0 for i in flat]
-            pixString = self.create_encoded_pixel_string()
-            flat[:len(pixString)] = pixString
             img = Image.new('RGB', (dim, dim))
             img.putdata(flat)
             img.save('image2.png')

@@ -34,6 +34,7 @@ class Decode:
         with Image.open(self.imageFname) as im:
             pixels = im.getdata()
 
+        self.numPixels = len(pixels)
         # get attributes
         attributes = []
         varArr = []
@@ -58,13 +59,52 @@ class Decode:
 
     def extractWavData(self, count, pixels):
         self.normWavData = []
-        for p in range(count, self.pixelCount):
-            lChan = pixels[p][0] / 256
-            rChan = pixels[p][1] / 256
-            if lChan == 0 and rChan == 0:
-                break
-            self.normWavData.append([lChan, rChan])
-        np.array(self.normWavData)
+        if self.style == 0:
+            for p in range(count, self.pixelCount):
+                lChan = pixels[p][0] / 256
+                rChan = pixels[p][1] / 256
+                self.normWavData.append([lChan, rChan])
+        elif self.style == 1:
+            dim = int(self.numPixels ** .5)
+            numPixParsed = 0
+            x = count
+            y = 0
+            dir = 0
+            rightBuf = 0
+            downBuf = 0
+            leftBuf = 0
+            topBuf = 1
+            while True:
+                if numPixParsed == self.pixelCount-count+5:
+                    break
+                
+                i = x + y * dim
+                lchan = pixels[i][0]
+                rchan = pixels[i][1]
+                self.normWavData.append([lchan, rchan])
+                if dir == 0:
+                    x += 1
+                elif dir == 1:
+                    y += 1
+                elif dir == 2:
+                    x -= 1
+                elif dir == 3:
+                    y -= 1
+                
+                if dir == 0 and x == dim-1-rightBuf:
+                    dir = 1
+                    rightBuf += 1
+                elif dir == 1 and y == dim-1-downBuf:
+                    dir = 2
+                    downBuf += 1
+                elif dir == 2 and x == 0+leftBuf:
+                    dir = 3
+                    leftBuf += 1
+                elif dir == 3 and y == 0+topBuf:
+                    dir = 0
+                    topBuf += 1
+
+                numPixParsed += 1
 
 
     # Denormalize extracted wav data and store raw wav data
