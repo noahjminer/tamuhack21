@@ -14,7 +14,7 @@ class Pixel:
 
 
 class ImageGenerator:
-    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0, backGroundImageFname=""):
+    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0, backGroundImageFname="", redScalar=1, blueScalar=1):
         self.sr = samplerate
         self.data = data
         self.style = imageOption
@@ -22,6 +22,8 @@ class ImageGenerator:
         self.min = min
         self.scale = scale
         self.backGroundImageFname = backGroundImageFname
+        self.redScalar = redScalar
+        self.blueScalar = blueScalar
         self.gen_image()
 
     def find_dim(self, len): # need to write in a way that gets closer to len
@@ -83,10 +85,10 @@ class ImageGenerator:
                 backIm = im.getdata()
             for point in self.data:
                 # print(y, x)
-                r = math.floor(point[0])
-                g = math.floor(point[1])
+                r = math.floor(point[0] / self.redScalar)
+                g = math.floor(point[1] / self.blueScalar)
                 if self.backGroundImageFname != "":
-                    b = backIm[x + y*dim][2] * 2
+                    b = backIm[x + y*dim][2]
                 else:
                     b = count % 10
                 mat[y, x] = (r, g, b)

@@ -5,8 +5,10 @@ from util import list2string
 import numpy as np
 
 class Decode:
-    def __init__(self, imageFname):
+    def __init__(self, imageFname, redScalar=1, blueScalar=1):
         self.imageFname = imageFname
+        self.redScalar = redScalar
+        self.blueScalar = blueScalar
         self.extractDataFromImage()
         self.denormalize()
 
@@ -79,8 +81,8 @@ class Decode:
                     break
                 
                 i = x + y * dim
-                lchan = pixels[i][0]
-                rchan = pixels[i][1]
+                lchan = pixels[i][0] * self.redScalar
+                rchan = pixels[i][1] * self.blueScalar
                 self.normWavData.append([lchan, rchan])
                 if dir == 0:
                     x += 1
