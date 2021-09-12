@@ -55,6 +55,7 @@ class Encode:
 #  [0 0]
 #  [0 0]
 #  [3 3]]
+
 # print(type(enc.scalerScale))
 # print(enc.scalerMin)
 # print(denorm)

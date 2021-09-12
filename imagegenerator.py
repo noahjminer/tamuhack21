@@ -141,7 +141,6 @@ class ImageGenerator:
                 tempArray.clear()
                 tempArray.append(ord(i))
 
-
         if count == 3:
             p = Pixel(tempArray[0], tempArray[1], tempArray[2])
             pixels.append(p.getValue())
@@ -182,7 +181,7 @@ class ImageGenerator:
             count = 0
 
             pixels.append((1000, 1000, 1000))
-        tempArray.clear()
+            tempArray.clear()
 
         # min
         for k in min:
@@ -209,7 +208,7 @@ class ImageGenerator:
                 pixels.append(p.getValue())
             count = 0
             pixels.append((1000, 1000, 1000))
-        tempArray.clear()
+            tempArray.clear()
 
         # samplerate
         s = str(sr)
