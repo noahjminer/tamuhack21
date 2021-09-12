@@ -15,14 +15,12 @@ class Decode:
             print("Incorrect number of attr in extractDataFromImage")
             quit(0)
 
-        print(attributes[0])
-        print(list2string(attributes[0]))
         self.style = int(list2string(attributes[0]))
         self.wavFilename = list2string(attributes[1])
         self.scalerScale[0] = np.float64(list2string(attributes[2]))
         self.scalerScale[1] = np.float64(list2string(attributes[3]))
-        self.scalerMin[0] = np.float(list2string(attributes[4]))
-        self.scalerMin[1] = np.float(list2string(attributes[5]))
+        self.scalerMin[0] = np.float64(list2string(attributes[4]))
+        self.scalerMin[1] = np.float64(list2string(attributes[5]))
         self.sampleRate = int(list2string(attributes[6]))
 
     # todo - need to extract the normalized wav data, sample rate, scalerMin, and scalerScale from image
@@ -58,8 +56,8 @@ class Decode:
         self.parseAttributes(attributes)
 
         for p in range(count, len(pixels)):
-            lChan = (pixels[p][0] / 255) * 2 - 1
-            rChan = (pixels[p][1] / 255) * 2 - 1
+            lChan = pixels[p][0] / 255
+            rChan = pixels[p][1] / 255
             self.normWavData.append([lChan, rChan])
         np.array(self.normWavData)
 
@@ -68,12 +66,9 @@ class Decode:
         # the feature range will not change
         scaler = MinMaxScaler((0, 1))
         scaler.min_ = self.scalerMin
-        print(self.scalerMin)
-        print(self.scalerScale)
         scaler.scale_ = self.scalerScale
         self.rawWavData = scaler.inverse_transform(self.normWavData)
         np.array(self.rawWavData)
-
 
 
     # Export song to current working directory

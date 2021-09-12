@@ -55,8 +55,8 @@ denorm = sc.inverse_transform(enc.normWavData)
 #  [0 0]
 #  [0 0]
 #  [3 3]]
-print(type(enc.scalerScale))
 print(enc.scalerMin)
+print(enc.scalerScale)
 print(denorm)
 #  ...
 #  [0. 0.]
