@@ -18,6 +18,8 @@ class Handler:
 
     def encodeWavIntoImage(self):
         if not self.active:
+            if self.wavToEncode == "":
+                return -1
             self.active = True
             enc = Encode(self.wavToEncode)
             enc.normalize()
@@ -28,13 +30,17 @@ class Handler:
             del enc
             del img
         self.active = False
+        return 0
 
     def decodeImageIntoWav(self):
         if not self.active:
             self.active = True
+            if self.imageToDecode == "":
+                return -1
             dec = Decode(self.imageToDecode)
             dec.exportSong()
             del dec
         self.active = False
+        return 0
 
 

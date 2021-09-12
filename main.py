@@ -17,6 +17,10 @@ class WidgetGallery(QDialog):
         self.originalPalette = QApplication.palette()
         QApplication.setStyle(QStyleFactory.create("Windows"))
 
+        self.complete = QLabel()
+
+        self.complete2 = QLabel()
+
         styleComboBox = QComboBox()
         styleComboBox.addItems(["Linear", "Spiral"])
 
@@ -140,6 +144,7 @@ class WidgetGallery(QDialog):
         layout.addWidget(self.redScalarSlider)
         layout.addWidget(self.greenScalar)
         layout.addWidget(self.greenScalarSlider)
+        layout.addWidget(self.complete)
         layout.addWidget(render)
         layout.addStretch(1)
         self.topRightGroupBox.setLayout(layout)
@@ -153,7 +158,12 @@ class WidgetGallery(QDialog):
         print(self.greenScalarSlider.value())
 
     def renderImage(self):
-        self.handler.encodeWavIntoImage()
+        self.complete.setText("")
+        err = self.handler.encodeWavIntoImage()
+        if err == -1:
+            self.complete.setText("No Image Link")
+        else:
+            self.complete.setText("Image Rendered")
 
     def createBottomLeftTabWidget(self):
         self.bottomLeftGroupBox = QGroupBox("Extract wav from image")
@@ -181,10 +191,16 @@ class WidgetGallery(QDialog):
 
         layout = QVBoxLayout()
         layout.addWidget(btn)
+        layout.addWidget(self.complete2)
         self.bottomRightGroupBox.setLayout(layout)
 
     def extractwav(self):
-        self.handler.decodeImageIntoWav()
+        self.complete2.setText("")
+        err = self.handler.decodeImageIntoWav()
+        if err == -1:
+            self.complete2.setText("No audio file inputted")
+        else:
+            self.complete2.setText("Audio rendered")
 
     def createProgressBar(self):
         self.progressBar = QProgressBar()
