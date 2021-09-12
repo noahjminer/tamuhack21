@@ -14,14 +14,14 @@ class Pixel:
 
 
 class ImageGenerator:
-
-    def __init__(self, filename, min, scale, samplerate, data, imageOption=0):
+    def __init__(self, songFilename, min, scale, samplerate, data, imageOption=0):
         self.sr = samplerate
         self.data = data
-        self.imageOption = imageOption
-        self.filename = filename
+        self.style = imageOption
+        self.songFilename = songFilename
         self.min = min
         self.scale = scale
+        self.gen_image()
 
     def find_dim(self, len): # need to write in a way that gets closer to len
         sqrt = len ** .5
@@ -42,7 +42,7 @@ class ImageGenerator:
             dim = self.find_dim(len(self.data))
             pixelData = []
 
-            pixelString = self.create_encoded_pixel_string(style)
+            pixelString = self.create_encoded_pixel_string()
             for i in pixelString:
                 pixelData.append(i)
 
@@ -59,8 +59,6 @@ class ImageGenerator:
                 g = math.floor(i[1] * 255)
                 b = math.floor((count / dim**2) * 255)
                 pixelData.append((r, g, b))
-
-            print(dim)
 
             img = Image.new('RGB', (dim, dim))
             img.putdata(pixelData)
@@ -103,7 +101,7 @@ class ImageGenerator:
             
             flat = mat.flatten()
             flat = [i if i is not None else 0 for i in flat]
-            pixString = self.create_encoded_pixel_string(style)
+            pixString = self.create_encoded_pixel_string()
             flat[:len(pixString)] = pixString
             img = Image.new('RGB', (dim, dim))
             img.putdata(flat)
@@ -114,12 +112,13 @@ class ImageGenerator:
     # Takes necessary wav data and turns into array of Image friendly pixels to decode
     # order is filename, scale, min, samplerate
     # Sequences will be split by extreme value to be determined
-    def create_encoded_pixel_string(self, style=0):
+    def create_encoded_pixel_string(self):
         pixels = []
-        fn = self.filename
+        fn = self.songFilename
         scale = self.scale
         min = self.min
         sr = self.sr
+        style = self.style
 
         count = 0
 
@@ -237,3 +236,11 @@ class ImageGenerator:
         pixels.append((1000, 1000, 1000))
 
         return pixels
+<<<<<<< HEAD
+=======
+
+
+from encode import Encode
+enc = Encode('coolbeat.wav')
+gen = ImageGenerator('coolbeat.wav', enc.scalerMin, enc.scalerScale, enc.sampleRate, enc.normWavData, 1)
+>>>>>>> 3878b43a870e8df0b5a9d29aafab94d93fac5b6d
