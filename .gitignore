@@ -9,6 +9,8 @@ __pycache__/
 *.wav
 *.png
 .idea
+*.jpg
+testing.py
 
 # Distribution / packaging
 .Python
